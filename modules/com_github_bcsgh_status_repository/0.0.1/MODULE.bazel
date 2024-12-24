@@ -1,0 +1,16 @@
+module(
+    name = "com_github_bcsgh_status_repository",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "bazel_skylib", 
+    version = "1.7.1",
+)
+
+status_repository = use_repo_rule("//status_repository:repo.bzl", "status_repository")
+
+status_repository(
+    name = "workspace_status",
+    alt_git_commit = "<<UNKNOWN>>",
+)
