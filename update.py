@@ -94,7 +94,7 @@ def main(args):
 
   for mod, metadata in md.items():
     print("=====\n%s" % mod)
-    vers = list(src.get(mod, {}).keys())
+    vers = [v for v in src.get(mod, {}).keys() if not v.startswith("local-")]
 
     #### Populate metadat.json
     with open(metadata, "r") as mdf:
@@ -140,6 +140,37 @@ def main(args):
       body = blob.data_stream.read().decode('utf-8')
       mb = os.path.join(os.path.dirname(metadata), ver, "MODULE.bazel")
       UpdateFile(args.update, mb, body)
+
+    for rem in repo.remotes:
+      if not rem.name.startswith("/"): continue
+
+      ### Dir
+      lv = os.path.join(root, mod, "local-%s" % rem.name)
+      if not os.path.exists(lv): os.mkdir(lv)
+
+      ### sources.json
+      lvs = os.path.join(lv, "source.json")
+      if os.path.exists(lvs):
+        with open(lvs, "r") as lvf:
+          old_j = json.load(lvf)
+      else:
+        old_j = {}
+
+      target = os.path.realpath(next(rem.urls))
+      j = {
+        "type": "local_path",
+        "path": target,
+      }
+
+      UpdateJson(args.update, lvs, j, old_j)
+
+      ### MODULE.bazel
+      if args.update:
+        mbl = os.path.join(lv, "MODULE.bazel")
+        mbt = os.path.join(target, "MODULE.bazel")
+        if not os.path.exists(mbl):
+          print("Linking ", mbl)
+          os.symlink(mbt, mbl)
 
   return 0;
 
