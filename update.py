@@ -132,7 +132,17 @@ def main(args):
           sp_orig = copy.deepcopy(sp_json)
           sp_json["type"] = "git_repository"
           sp_json["remote"] = git_url
-          sp_json["tag"] = ver
+
+          if args.pin_commit:
+            at = repo.tags[ver].commit
+            sp_json["commit"] = at.hexsha
+            sp_json["shallow_since"] = at.committed_datetime.strftime("%s %z")
+            sp_json.pop("tag", None)
+          else:
+            sp_json.pop("commit", None)
+            sp_json.pop("shallow_since", None)
+            sp_json["tag"] = ver
+
           UpdateJson(args.update, ver_sp, sp_json, sp_orig)
 
       ## Populate MODULE.bazel from git
@@ -177,6 +187,7 @@ def main(args):
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
+  parser.add_argument("--pin_commit", default=False, action='store_true', help="Use commit's rather than tags.")
   parser.add_argument("--prefix", type=str, help="A prefix to remove from paths.")
   parser.add_argument("--update", default=False, action='store_true', help="Re-write the files.")
   parser.add_argument("files", type=str, nargs="*", help="input files")
