@@ -61,6 +61,7 @@ def UpdateJson(update, f, new_json, old_json):
     print("Writing ", f)
     with open(f, "wt") as w:
       json.dump(new_json, w, indent=2)
+      w.write("\n")
   else:
     diff = deepdiff.DeepDiff(new_json, old_json)
     if diff:
@@ -94,7 +95,17 @@ def main(args):
 
   for mod, metadata in md.items():
     print("=====\n%s" % mod)
-    vers = [v for v in src.get(mod, {}).keys() if not v.startswith("local-")]
+    mod_dir = os.path.dirname(metadata)
+    listing = [
+        (v, os.path.join(mod_dir, v))
+        for v in os.listdir(mod_dir)
+        if not v.startswith("local-")
+    ]
+    vers = [
+        v
+        for v, p in listing
+        if os.path.isdir(p) and not os.path.islink(p)
+    ]
 
     #### Populate metadat.json
     with open(metadata, "r") as mdf:
@@ -105,7 +116,7 @@ def main(args):
     UpdateJson(args.update, metadata, md_json, md_orig)
 
     #### Inspect local git repo
-    r = os.path.join(os.path.dirname(metadata), "local_repo")
+    r = os.path.join(mod_dir, "local_repo")
     if not os.path.exists(r):
       print("No git repo at %s" % r)
       continue
@@ -122,9 +133,12 @@ def main(args):
 
       #### Populate source.json from git
       ver_sp = os.path.join(verp, "source.json")
-      if os.path.exists(ver_sp):
-        with open(ver_sp, "r") as spf:
-          sp_json = json.load(spf)
+      if os.path.exists(verp):
+        if os.path.exists(ver_sp):
+          with open(ver_sp, "r") as spf:
+            sp_json = json.load(spf)
+        else:
+          sp_json = {}
 
         if sp_json and sp_json.get("type", "") != "git_repository":
           print("%s is of type %s" % (ver_sp, sp_json.get("type", "archive")))
@@ -146,13 +160,16 @@ def main(args):
           UpdateJson(args.update, ver_sp, sp_json, sp_orig)
 
       ## Populate MODULE.bazel from git
-      blob = repo.tags[ver].commit.tree / "MODULE.bazel"
-      body = blob.data_stream.read().decode('utf-8')
-      mb = os.path.join(os.path.dirname(metadata), ver, "MODULE.bazel")
-      UpdateFile(args.update, mb, body)
+      if not "MODULE.bazel" in repo.tags[ver].commit.tree:
+        print("Missing MODULE.bazel in git @%s." % ver)
+      else:
+        blob = repo.tags[ver].commit.tree / "MODULE.bazel"
+        body = blob.data_stream.read().decode('utf-8')
+        mb = os.path.join(mod_dir, ver, "MODULE.bazel")
+        UpdateFile(args.update, mb, body)
 
     for rem in repo.remotes:
-      if not rem.name.startswith("/"): continue
+      if not rem.url.startswith("/"): continue
 
       ### Dir
       lv = os.path.join(root, mod, "local-%s" % rem.name)
