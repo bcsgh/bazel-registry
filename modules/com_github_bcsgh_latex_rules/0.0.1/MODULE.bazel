@@ -1,0 +1,44 @@
+module(
+    name = "com_github_bcsgh_latex_rules",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.7.1",
+)
+
+bazel_dep(
+    name = "com_github_bcsgh_build_test",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "com_github_bcsgh_fail_test",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "com_github_bcsgh_status_repository",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "rules_python",
+    version = "1.0.0",
+)
+
+status_repository = use_repo_rule("@com_github_bcsgh_status_repository//status_repository:repo.bzl", "status_repository")
+
+status_repository(
+    name = "workspace_status",
+    alt_git_commit = "<<UNKNOWN>>",
+)
+
+#"""
+latex_toolchain_repository = use_repo_rule("//latex:repo.bzl", "latex_toolchain_repository")
+latex_toolchain_repository(name="local_latex_toolchain")
+register_toolchains("@local_latex_toolchain//:local_latex")  # uses ctx.which to look things up
+"""
+register_toolchains("//latex:linux_texlive")  # assumes default paths
+#"""

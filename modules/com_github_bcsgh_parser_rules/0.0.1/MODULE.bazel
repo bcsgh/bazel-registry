@@ -1,0 +1,28 @@
+module(
+    name = "com_github_bcsgh_parser_rules",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "abseil-cpp",
+    version = "20240722.0.bcr.2",
+    repo_name = "com_google_absl",
+)
+
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.7.1",
+)
+
+bazel_dep(
+    name = "com_github_bcsgh_build_test",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "googletest",
+    version = "1.15.2",
+    repo_name = "com_google_googletest",
+)
+
+register_toolchains("//parser:linux_flex_bison")

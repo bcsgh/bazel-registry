@@ -1,0 +1,19 @@
+module(
+    name = "com_github_bcsgh_text_tools",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "bazel_skylib", 
+    version = "1.7.1",
+)
+
+bazel_dep(
+    name = "com_github_bcsgh_fail_test", 
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "rules_python",
+    version = "1.0.0",
+)
