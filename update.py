@@ -28,6 +28,7 @@
 import argparse
 import copy
 import deepdiff  # pip install deepdiff
+import glob
 import git  # pip install GitPython
 import json
 import os
@@ -35,6 +36,12 @@ import os
 def SortPaths(root, files):
   md = {}
   src = {}
+
+  files = [
+    f
+    for g in files
+    for f in glob.glob(g)
+  ]
 
   for j in files:
     j_abs = os.path.abspath(j)
@@ -86,8 +93,83 @@ def UpdateFile(update, f, new_str):
       print("  Difference ", f)
 
 
+class NoOp:
+  def __call__(self, *x, **y): return self
+  def __getattr__(self, *x, **y): return self
+
+def AddGit(update, root, repo_path):
+  repo = git.Repo(repo_path)
+
+  if not "MODULE.bazel" in repo.head.commit.tree:
+    print("Missing MODULE.bazel in git @%s." % repo_path)
+    return
+
+  blob = repo.head.commit.tree / "MODULE.bazel"
+  body = blob.data_stream.read().decode('utf-8')
+
+  m_name = None
+  m_version = None
+
+  def Mod(name=False, version=False, **kwargs):
+    nonlocal m_name
+    nonlocal m_version
+    if name: m_name = name
+    if version: m_version = version
+
+  noop = NoOp()
+  g = {
+      "__builtins__": {},
+      "module": Mod,
+      "bazel_dep": noop,
+      "use_repo": noop,
+      "register_toolchains": noop,
+
+      "use_extension": noop,
+      "use_repo_rule": noop,
+  }
+  exec(body, g)
+
+  if not m_name: return
+  print(m_name, "...")
+
+  m_path = os.path.join(root, m_name)
+  if not os.path.exists(m_path):
+    if update:
+      print( "  Making module")
+      os.mkdir(m_path)
+    else:
+      print("Not found", m_path, "from", repo_path)
+
+  r_path = os.path.join(m_path, "local_repo")
+  if not os.path.exists(r_path):
+    if update:
+      print("  Linking repo")
+      os.symlink(repo_path, r_path)
+    else:
+      print("Not found", r_path, "from", repo_path)
+
+  md_path = os.path.join(m_path, "metadata.json")
+  if not os.path.exists(md_path):
+    if update:
+      print("  Making metadata.json")
+      with open(md_path, "w") as f:
+        f.write("{}\n")
+    else:
+      print("Not found", md_path, "from", repo_path)
+
+  v_path = os.path.join(m_path, m_version)
+  if not os.path.exists(v_path):
+    if update:
+      print("  Making version", m_version)
+      os.mkdir(v_path)
+    else:
+      print("Not found", v_path, "from", repo_path)
+
 def main(args):
   root = os.path.abspath(args.prefix) + '/modules/'
+
+  for repo in args.add_git:
+    AddGit(args.update, root, repo)
 
   md, src = SortPaths(root, args.files)
 
@@ -112,7 +194,7 @@ def main(args):
       md_json = json.load(mdf)
 
     md_orig = copy.deepcopy(md_json)
-    md_json["versions"] = vers
+    md_json["versions"] = sorted(vers)
     UpdateJson(args.update, metadata, md_json, md_orig)
 
     #### Inspect local git repo
@@ -206,6 +288,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--pin_commit", default=False, action='store_true', help="Use commit's rather than tags.")
   parser.add_argument("--prefix", type=str, help="A prefix to remove from paths.")
+  parser.add_argument("--add_git", nargs='*', help="A prefix to remove from paths.")
   parser.add_argument("--update", default=False, action='store_true', help="Re-write the files.")
   parser.add_argument("files", type=str, nargs="*", help="input files")
   args = parser.parse_args()
