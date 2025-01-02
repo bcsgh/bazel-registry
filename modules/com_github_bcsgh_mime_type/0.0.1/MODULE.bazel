@@ -1,0 +1,16 @@
+module(
+    name = "com_github_bcsgh_mime_type",
+    version = "0.0.1",
+)
+
+#############################################
+bazel_dep(
+    name = "abseil-cpp",
+    version = "20240116.2"
+)
+
+#############################################
+bazel_dep(
+    name = "googletest",
+    version = "1.15.2",
+)
