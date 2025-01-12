@@ -1,0 +1,10 @@
+module(
+    name = "com_github_bcsgh_registration",
+    version = "0.0.2",
+)
+
+#############################################
+bazel_dep(
+    name = "googletest",
+    version = "1.15.2",
+)
