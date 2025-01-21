@@ -97,16 +97,8 @@ class NoOp:
   def __call__(self, *x, **y): return self
   def __getattr__(self, *x, **y): return self
 
-def AddGit(update, root, repo_path):
-  repo = git.Repo(repo_path)
 
-  if not "MODULE.bazel" in repo.head.commit.tree:
-    print("Missing MODULE.bazel in git @%s." % repo_path)
-    return
-
-  blob = repo.head.commit.tree / "MODULE.bazel"
-  body = blob.data_stream.read().decode('utf-8')
-
+def ParseModule(body):
   m_name = None
   m_version = None
 
@@ -128,6 +120,25 @@ def AddGit(update, root, repo_path):
       "use_repo_rule": noop,
   }
   exec(body, g)
+  return m_name, m_version
+
+
+def AddGit(update, root, repo_path):
+  repo = git.Repo(repo_path)
+
+  rm_path = os.path.join(repo_path, "MODULE.bazel")
+  if "MODULE.bazel" in repo.head.commit.tree:
+    blob = repo.head.commit.tree / "MODULE.bazel"
+    body = blob.data_stream.read().decode('utf-8')
+  elif os.path.exists(rm_path):
+    with open(rm_path, "r") as f:
+      body = f.read()
+  else:
+    print("Missing MODULE.bazel in git @%s." % repo_path)
+    print("Missing MODULE.bazel in local @%s." % rm_path)
+    return
+
+  m_name, m_version = ParseModule(body)
 
   if not m_name: return
   print(m_name, "...")
@@ -168,7 +179,7 @@ def AddGit(update, root, repo_path):
 def main(args):
   root = os.path.abspath(args.prefix) + '/modules/'
 
-  for repo in args.add_git:
+  for repo in args.add_git or []:
     AddGit(args.update, root, repo)
 
   md, src = SortPaths(root, args.files)
@@ -181,7 +192,6 @@ def main(args):
     listing = [
         (v, os.path.join(mod_dir, v))
         for v in os.listdir(mod_dir)
-        if not v.startswith("local-")
     ]
     vers = [
         v
@@ -205,6 +215,28 @@ def main(args):
 
     repo = git.Repo(r)
     git_url = repo.remotes["origin"].url
+
+    for t in repo.tags:
+      if t.name in vers: continue
+      if not "MODULE.bazel" in t.commit.tree: continue
+
+      blob = t.commit.tree / "MODULE.bazel"
+      body = blob.data_stream.read().decode('utf-8')
+
+      m_name, m_version = ParseModule(body)
+      if mod != m_name: continue
+      if t.name != m_version:
+        print("Mismated tag and version:", t.name, m_version)
+
+      verp = os.path.join(root, mod, m_version)
+      if not os.path.exists(verp): os.mkdir(verp)
+
+      ver_sp = os.path.join(verp, "source.json")
+      if not os.path.exists(ver_sp):
+        print("Creating", mod, m_version)
+        if args.update:
+          with open(ver_sp, "w") as spf:
+            spf.write("{}")
 
     for ver in vers:
       if not ver in repo.tags:
@@ -242,44 +274,20 @@ def main(args):
           UpdateJson(args.update, ver_sp, sp_json, sp_orig)
 
       ## Populate MODULE.bazel from git
-      if not "MODULE.bazel" in repo.tags[ver].commit.tree:
-        print("Missing MODULE.bazel in git @%s." % ver)
-      else:
+      rm_path = os.path.join(r, "MODULE.bazel")
+      if "MODULE.bazel" in repo.tags[ver].commit.tree:
         blob = repo.tags[ver].commit.tree / "MODULE.bazel"
         body = blob.data_stream.read().decode('utf-8')
+      elif os.path.exists(rm_path):
+        with open(rm_path, "r") as f:
+          body = f.read()
+      else:
+        print("Missing MODULE.bazel in git @%s." % ver)
+        body = None
+
+      if body:
         mb = os.path.join(mod_dir, ver, "MODULE.bazel")
         UpdateFile(args.update, mb, body)
-
-    for rem in repo.remotes:
-      if not rem.url.startswith("/"): continue
-
-      ### Dir
-      lv = os.path.join(root, mod, "local-%s" % rem.name)
-      if not os.path.exists(lv): os.mkdir(lv)
-
-      ### sources.json
-      lvs = os.path.join(lv, "source.json")
-      if os.path.exists(lvs):
-        with open(lvs, "r") as lvf:
-          old_j = json.load(lvf)
-      else:
-        old_j = {}
-
-      target = os.path.realpath(next(rem.urls))
-      j = {
-        "type": "local_path",
-        "path": target,
-      }
-
-      UpdateJson(args.update, lvs, j, old_j)
-
-      ### MODULE.bazel
-      if args.update:
-        mbl = os.path.join(lv, "MODULE.bazel")
-        mbt = os.path.join(target, "MODULE.bazel")
-        if not os.path.exists(mbl):
-          print("Linking ", mbl)
-          os.symlink(mbt, mbl)
 
   return 0;
 
