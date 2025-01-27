@@ -295,9 +295,9 @@ def main(args):
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--pin_commit", default=False, action='store_true', help="Use commit's rather than tags.")
-  parser.add_argument("--prefix", type=str, help="A prefix to remove from paths.")
-  parser.add_argument("--add_git", nargs='*', help="A prefix to remove from paths.")
+  parser.add_argument("--prefix", type=str, default="", help="A prefix to remove from paths.")
+  parser.add_argument("--add_git", nargs='*', help="The path to a local repo to insert into the registry.")
   parser.add_argument("--update", default=False, action='store_true', help="Re-write the files.")
-  parser.add_argument("files", type=str, nargs="*", help="input files")
+  parser.add_argument("files", type=str, nargs="*", help="input files or globs for the metadata.json to process.")
   args = parser.parse_args()
   exit(main(args))
