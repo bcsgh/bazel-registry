@@ -1,0 +1,10 @@
+{
+  "url": "https://ftp.gnu.org/gnu/bison/bison-3.7.2.tar.gz",
+  "integrity": "sha256-QVzZEERRe7/Y0TXeok4FRQHbI4pVFe3Zzbt5W6PoKoQ=",
+  "strip_prefix": "bison-3.7.2",
+  "patches": {
+    "add_build_file.patch": "sha256-0o3TBQVe6RykA5+M0c516/8fcGbvYQin+dq4EoklYOs=",
+    "module_dot_bazel.patch": "sha256-vJR4iOzWxtAdDtlnT0HnZsy6cfk+jaQ002P1XONuuS4="
+  },
+  "patch_strip": 1
+}

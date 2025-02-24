@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz",
+  "integrity": "sha256-6HquAyvwfCb4WsDtMlCZjDdiHZX4vXSLMfFbM8Re6ZU=",
+  "strip_prefix": "flex-2.6.4",
+  "patches": {
+    "add_build_file.patch": "sha256-vcJpeIWj9CV5LXEnUXGYRvT70wvKGAYf/0YPDT2YOjM=",
+    "module_dot_bazel.patch": "sha256-lQT/zr1ZbL9HlpqlB/Z8ak94zo+LFF1qQn5Lt5Cd9Hc="
+  },
+  "patch_strip": 1
+}

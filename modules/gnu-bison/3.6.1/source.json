@@ -1,0 +1,10 @@
+{
+  "url": "https://ftp.gnu.org/gnu/bison/bison-3.6.1.tar.gz",
+  "integrity": "sha256-ESD4v+LME+Xh4/Zx3EGxpTXKWnWnDVs0nBnanUOJ900=",
+  "strip_prefix": "bison-3.6.1",
+  "patches": {
+    "add_build_file.patch": "sha256-0o3TBQVe6RykA5+M0c516/8fcGbvYQin+dq4EoklYOs=",
+    "module_dot_bazel.patch": "sha256-fKE7shBoSJgT1Q3SNGUfpNvxKHjqvLEetrP/THsjOac="
+  },
+  "patch_strip": 1
+}
