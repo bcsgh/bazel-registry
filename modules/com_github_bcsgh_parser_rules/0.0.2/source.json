@@ -1,0 +1,5 @@
+{
+  "type": "git_repository",
+  "remote": "https://github.com/bcsgh/parser-rules.git",
+  "tag": "0.0.2"
+}
