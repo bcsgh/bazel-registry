@@ -3,12 +3,18 @@ new file mode 100644
 index 00000000..ffffffff
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,19 @@
 +load("@rules_foreign_cc//foreign_cc:configure.bzl", "configure_make")
 +
 +filegroup(
 +    name = "bin_source",
 +    srcs = glob(["**"]),
++)
++
++filegroup(
++    name = "bison-deps",
++    srcs = glob(["data/**"]),
++    visibility = ["//visibility:public"],
 +)
 +
 +configure_make(

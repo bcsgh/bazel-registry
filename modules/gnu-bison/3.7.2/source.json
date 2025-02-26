@@ -3,7 +3,7 @@
   "integrity": "sha256-QVzZEERRe7/Y0TXeok4FRQHbI4pVFe3Zzbt5W6PoKoQ=",
   "strip_prefix": "bison-3.7.2",
   "patches": {
-    "add_build_file.patch": "sha256-0o3TBQVe6RykA5+M0c516/8fcGbvYQin+dq4EoklYOs=",
+    "add_build_file.patch": "sha256-Or+AB3vtP65uV4TkJWl9ZWMXe/hPqHzM44sBeMJCRnY=",
     "module_dot_bazel.patch": "sha256-vJR4iOzWxtAdDtlnT0HnZsy6cfk+jaQ002P1XONuuS4="
   },
   "patch_strip": 1
