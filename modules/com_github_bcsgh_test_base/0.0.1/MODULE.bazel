@@ -1,0 +1,17 @@
+module(
+    name = "com_github_bcsgh_test_base",
+    version = "0.0.1",
+)
+
+bazel_dep(
+    name = "abseil-cpp",
+    version = "20250127.0",
+)
+bazel_dep(
+    name = "googletest",
+    version = "1.16.0",
+)
+bazel_dep(
+    name = "rules_cc",
+    version = "0.1.1",
+)
