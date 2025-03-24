@@ -1,0 +1,20 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,14 @@
++cc_library(
++    name = "aws-c-event-stream",
++    srcs = glob(["source/*.c"]),
++    hdrs = glob([
++        "include/aws/event-stream/**/*.h",
++    ]),
++    includes = ["include"],
++    deps = [
++        "@aws-c-common",
++        "@aws-c-io",
++        "@aws-checksums",
++    ],
++    visibility = ["//visibility:public"],
++)
