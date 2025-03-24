@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-mqtt/archive/refs/tags/v0.12.2.tar.gz",
+  "strip_prefix": "aws-c-mqtt-0.12.2",
+  "integrity": "sha256-Vwfo3bU2vG38ZfsW5NuPO5UQqhh6jFtdWYJPip6temM=",
+  "patches": {
+    "add_build_file.patch": "sha256-eV70o4CSD/YWiCXXrU9LA2shQb1Yulgt3dDWet+Li00=",
+    "module_dot_bazel.patch": "sha256-eWziUa902gqGk7bJhawQr1TPHq3zcw6+hB2RV+Z5T7g="
+  },
+  "patch_strip": 1
+}

@@ -1,0 +1,22 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,16 @@
++cc_library(
++    name = "aws-c-mqtt",
++    srcs = glob([
++        "source/**/*.c",
++    ]),
++    hdrs = glob([
++        "include/aws/mqtt/**/*.h",
++    ]),
++    includes = ["include"],
++    deps = [
++        "@aws-c-common",
++        "@aws-c-http",
++        "@aws-c-io",
++    ],
++    visibility = ["//visibility:public"],
++)
