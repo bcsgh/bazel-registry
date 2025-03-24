@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/aws/s2n-tls/archive/refs/tags/v1.5.15.tar.gz",
+  "strip_prefix": "s2n-tls-1.5.15",
+  "integrity": "sha256-ED+TYcc2/qcngDiJGwVm/5dcQKxZzvWsW5IlpHbIq8Y=",
+  "patches": {
+    "add_build_file.patch": "sha256-XE6B4sZCeWDqtW95KbcskmrmB2SHHpkfKfo5FWZ0Z/w=",
+    "module_dot_bazel.patch": "sha256-jUdl3X9vpPNSbxEyQTc1udzT0Nlap9TrRnUnsaoJXIc="
+  },
+  "patch_strip": 1
+}

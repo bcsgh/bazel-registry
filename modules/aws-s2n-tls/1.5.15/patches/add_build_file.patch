@@ -1,0 +1,77 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,71 @@
++# @aws-c-io (and maybe others?) wants to find this file at a spesific path.
++cc_library(
++    name = "aws-s2n-tls.inc",
++    hdrs = ["api/unstable/cleanup.h"],
++    strip_include_prefix = "api",
++    include_prefix = "s2n",
++)
++
++EXCLUDES = [
++    "bin/**",
++    "docs/**",
++    "tests/**",
++    "codebuild/bin/**",
++    "utils/s2n_prelude.h",
++]
++
++cc_library(
++    name = "aws-s2n-tls-hdrs",
++    hdrs = glob([
++        "api/*.h",
++        "api/unstable/*.h",
++        "crypto/*.h",
++        "error/*.h",
++        "stuffer/*.h",
++        "tls/*.h",
++        "tls/extensions/*.h",
++        "utils/*.h",
++    ], exclude = EXCLUDES),
++    includes = [".", "api"],  # At least s2n.h is included without the api/
++)
++
++WITH_PRELUDE = [
++    "tls/s2n_config.c",
++]
++
++# Do this in a cc_library on its own to avoid propigating the -include copts.
++cc_library(
++    name = "aws-s2n-tls-impl",
++    srcs = WITH_PRELUDE,
++    additional_compiler_inputs = ["utils/s2n_prelude.h"],
++    copts = ["-include $(location :utils/s2n_prelude.h)"],
++    deps = [
++        "@openssl//:ssl",
++        ":aws-s2n-tls.inc",
++        ":aws-s2n-tls-hdrs",
++    ],
++)
++
++cc_library(
++    name = "aws-s2n-tls",
++    srcs = glob([
++        "crypto/*.c",
++        "error/*.c",
++        "stuffer/*.c",
++        "tls/*.c",
++        "tls/extensions/*.c",
++        "utils/*.c",
++    ], exclude = EXCLUDES + WITH_PRELUDE),
++    copts = ["-Wno-deprecated-declarations"],
++    linkopts = ["-lpthread"],
++    includes = ["api"],
++    deps = [
++        "@openssl//:ssl",
++        ":aws-s2n-tls.inc",
++        ":aws-s2n-tls-hdrs"
++    ],
++    implementation_deps = [
++        ":aws-s2n-tls-impl",
++    ],
++    visibility = ["//visibility:public"],
++)

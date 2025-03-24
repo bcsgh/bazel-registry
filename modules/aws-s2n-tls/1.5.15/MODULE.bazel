@@ -1,0 +1,9 @@
+module(
+    name = "aws-s2n-tls",
+    version = "1.5.15",
+)
+
+bazel_dep(
+    name = "openssl",
+    version = "3.3.1.bcr.1",
+)
