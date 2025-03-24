@@ -1,0 +1,50 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,44 @@
++load("@bazel_skylib//lib:selects.bzl", "selects")
++
++selects.config_setting_group(
++    name = "msvc_32",
++    match_all = [
++      "@platforms//cpu:x86_32",
++      "@bazel_tools//tools/cpp:msvc"
++    ],
++)
++
++selects.config_setting_group(
++    name = "msvc_64",
++    match_all = [
++      "@platforms//cpu:x86_64",
++      "@bazel_tools//tools/cpp:msvc"
++    ],
++)
++
++ARCH_ARM_C =     ["source/arm/**/*.c"]
++ARCH_INTEL_C =   ["source/intel/**/*.c"]
++
++cc_library(
++    name = "aws-checksums",
++    srcs = glob(
++        ["source/*.c"],
++        exclude = ARCH_ARM_C + ARCH_INTEL_C,
++    ) + select({
++        "@platforms//cpu:aarch32": glob(ARCH_ARM_C),
++        "@platforms//cpu:aarch64": glob(ARCH_ARM_C),
++        "@platforms//cpu:x86_32": ["source/intel/asm/crc32c_sse42_asm.c"],
++        "@platforms//cpu:x86_64": ["source/intel/asm/crc32c_sse42_asm.c"],
++        ":msvc_32": ["source/intel/visualc/visualc_crc32c_sse42.c"],
++        ":msvc_64": ["source/intel/visualc/visualc_crc32c_sse42.c"],
++    }),
++    hdrs = glob([
++        "include/aws/checksums/*.h",
++        "include/aws/checksums/private/*.h",
++    ]),
++    includes = ["include"],
++    deps = [
++        "@aws-c-common",
++    ],
++    visibility = ["//visibility:public"],
++)

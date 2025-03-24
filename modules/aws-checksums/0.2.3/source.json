@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-checksums/archive/refs/tags/v0.2.3.tar.gz",
+  "strip_prefix": "aws-checksums-0.2.3",
+  "integrity": "sha256-xojzEduKG3C7bSL26PKBeznhQZVG4znPdT1hNAlp7rQ=",
+  "patches": {
+    "add_build_file.patch": "sha256-YgnyAg3/G1CdByzIzhfr//T46kXL0qikhvu8BjQXWeQ=",
+    "module_dot_bazel.patch": "sha256-kUczztcY++ac7VcCIDu6qz0DsCnctq0erCCzOPzyq5A="
+  },
+  "patch_strip": 1
+}
