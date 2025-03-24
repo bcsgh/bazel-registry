@@ -1,0 +1,41 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,35 @@
++CRYPTO_DARWIN_C =  ["source/darwin/**/*.c"]
++CRYPTO_UNIX_C =    ["source/unix/**/*.c"]
++CRYPTO_WINDOWS_C = ["source/windows/**/*.c"]
++
++############################################################################
++cc_library(
++    name = "aws-c-cal",
++    srcs = glob(
++        ["source/*.c"],
++        exclude = CRYPTO_DARWIN_C + CRYPTO_UNIX_C + CRYPTO_WINDOWS_C,
++    ) + select({
++        "@platforms//os:osx": glob(CRYPTO_DARWIN_C),
++        "@platforms//os:ios": glob(CRYPTO_DARWIN_C),
++        "@platforms//os:linux": glob(CRYPTO_UNIX_C),
++        "@platforms//os:netbsd": glob(CRYPTO_UNIX_C),
++        "@platforms//os:openbsd": glob(CRYPTO_UNIX_C),
++        "@platforms//os:windows": glob(CRYPTO_WINDOWS_C),
++    }),
++    hdrs = glob([
++        "include/aws/cal/*.h",
++        "include/aws/cal/private/*.h",
++    ]),
++    includes = ["include"],
++    deps = [
++        "@aws-c-common",
++    ] + select({
++        #"@platforms//os:osx": [":apple-oss-common-crypto-not-implemented"],
++        #"@platforms//os:ios": [":apple-oss-common-crypto-not-implemented"],
++        "@platforms//os:linux": ["@openssl//:ssl"],
++        "@platforms//os:netbsd": ["@openssl//:ssl"],
++        "@platforms//os:openbsd": ["@openssl//:ssl"],
++        #"@platforms//os:windows": [":bcrypt-not-implemented"],
++    }),
++    visibility = ["//visibility:public"],
++)

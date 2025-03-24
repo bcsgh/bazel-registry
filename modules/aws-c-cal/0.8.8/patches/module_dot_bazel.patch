@@ -1,0 +1,23 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,17 @@
++module(
++    name = "aws-c-cal",
++    version = "0.8.8",
++)
++
++bazel_dep(
++    name = "aws-c-common",
++    version = "0.12.1",
++)
++bazel_dep(
++    name = "openssl",
++    version = "3.3.1.bcr.1",
++)
++bazel_dep(
++    name = "platforms",
++    version = "0.0.10",
++)
