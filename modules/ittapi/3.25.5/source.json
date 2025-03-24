@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/intel/ittapi/archive/refs/tags/v3.25.5.tar.gz",
+  "strip_prefix": "ittapi-3.25.5",
+  "integrity": "sha256-LRkkPnrIp94Iv9AFQpowjB21Khjlt7ZtKabBnwZpRuM=",
+  "patches": {
+    "add_build_file.patch": "sha256-kJ9G0EQYz++/nDfoUjg+FtEi0ZqKX4Z5oWXdF9XHzFk=",
+    "module_dot_bazel.patch": "sha256-CoaVw7H1c6ek4OyarO9ZklB477hNCVPrJWQcpbzjFfs=",
+    "remove_symlink_loop.patch": "sha256-GaCk7XqPXUhxYpJNr/shANGoe13kecks8Gs9THDWNA0="
+  },
+  "patch_strip": 1
+}

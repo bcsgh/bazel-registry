@@ -1,0 +1,82 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,76 @@
++load("@bazel_skylib//lib:selects.bzl", "selects")
++load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
++load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
++
++filegroup(
++    name = "all_src",
++    srcs = glob([
++        "CMakeLists.txt",
++        "cmake/*",
++        "include/*",
++        #"include/fortran/*",
++        #"include/fortran/posix/*",
++        #"include/fortran/win32/*",
++        "include/legacy/*",
++        #"src/*",
++        "src/ittnotify/*",
++        "src/ittnotify_refcol/*"
++    ]),
++)
++
++config_setting(
++    name = "debug",
++    values = {"compilation_mode": "dbg"},
++)
++
++bool_flag(
++    name = "enable_anomaly_detection",
++    build_setting_default = False,
++)
++config_setting(
++    name = "enable_anomaly_detection_cfg",
++    flag_values = {"enable_anomaly_detection": "true"},
++)
++
++selects.config_setting_group(
++    name = "win32",
++    match_all = [
++        "@platforms//cpu:x86_32",
++        "@platforms//os:windows",
++    ],
++)
++
++selects.config_setting_group(
++    name = "win64",
++    match_all = [
++        "@platforms//cpu:x86_64",
++        "@platforms//os:windows",
++    ],
++)
++
++cmake(
++    name = "ittapi",
++    build_args = select({
++        ":win32": ["-A", "Win32"],
++        ":win64": ["-A", "x64"],
++        "//conditions:default": [],
++    }),
++    cache_entries = select({
++        "@platforms//cpu:x86_32": {"FORCE_32": "ON"},
++        "@platforms//cpu:x86_64": {},
++    }) | select({
++      ":debug": {
++            "CMAKE_BUILD_TYPE": "Debug",
++            "CMAKE_VERBOSE_MAKEFILE:BOOL": "ON"
++        },
++        "//conditions:default": {}
++    }) | select({
++        ":enable_anomaly_detection_cfg": {
++            "ITT_API_IPT_SUPPORT": "1",
++        },
++        "//conditions:default": {},
++    }),
++    lib_source = ":all_src",
++    out_static_libs = ["libittnotify.a"],
++    visibility = ["//visibility:public"],
++)
