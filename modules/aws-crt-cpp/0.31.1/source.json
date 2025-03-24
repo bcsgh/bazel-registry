@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-crt-cpp/archive/refs/tags/v0.31.1.tar.gz",
+  "strip_prefix": "aws-crt-cpp-0.31.1",
+  "integrity": "sha256-9rSPLeRrjSxHagHPN6ZkNWuIXKf0957eMRltK+svpos=",
+  "patches": {
+    "add_build_file.patch": "sha256-S1p1oP75HYAOzTQnjqvKyT1stRUUgNrIm1o0NNVyt9Q=",
+    "module_dot_bazel.patch": "sha256-jyehPuP/wryGFNgmNNKqzIzDKA43ETOoIK6Btu5opMk="
+  },
+  "patch_strip": 1
+}
