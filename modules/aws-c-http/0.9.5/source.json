@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-http/archive/refs/tags/v0.9.5.tar.gz",
+  "strip_prefix": "aws-c-http-0.9.5",
+  "integrity": "sha256-y9uEEbQ5Z38wLTo7RpHi3BhS5p9AbTwvztK+la4jl/k=",
+  "patches": {
+    "add_build_file.patch": "sha256-01ZjelYkTuEM/4YAzDBp2truuGGlHmujir8uTFUqz10=",
+    "module_dot_bazel.patch": "sha256-3mZb2GaY65+7PgRKhtXdgfJlm+84BaJc0efuPVYTuKg="
+  },
+  "patch_strip": 1
+}

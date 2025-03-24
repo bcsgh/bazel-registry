@@ -1,0 +1,22 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,16 @@
++cc_library(
++    name = "aws-c-http",
++    srcs = glob(["source/*.c"]),
++    hdrs = glob([
++        "include/aws/http/*.h",
++        "include/aws/http/private/*.h",
++    ]),
++    includes = ["include"],
++    additional_compiler_inputs = glob(["include/aws/http/private/*.def"]),
++    deps = [
++        "@aws-c-common",
++        "@aws-c-compression",
++        "@aws-c-io",
++    ],
++    visibility = ["//visibility:public"],
++)
