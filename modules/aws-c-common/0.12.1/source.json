@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-common/archive/refs/tags/v0.12.1.tar.gz",
+  "strip_prefix": "aws-c-common-0.12.1",
+  "integrity": "sha256-MDUF7Ydwvog2TF+3ysGEPllY6hOJzKjx8KhBA9dmBJQ=",
+  "patches": {
+    "add_build_file.patch": "sha256-gg7QcaRE+fv99awidLTO42FdvKnbYN8QVRxPEGjxq38=",
+    "module_dot_bazel.patch": "sha256-LSh3ce47/WSXGlNuDDkn9C0HhBRZ6S1vWatE/REaqiA="
+  },
+  "patch_strip": 1
+}

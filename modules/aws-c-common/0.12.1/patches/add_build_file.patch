@@ -1,0 +1,128 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,122 @@
++load("@bazel_skylib//lib:selects.bzl", "selects")
++load("@bazel_skylib//rules:write_file.bzl", "write_file")
++
++############################################################################
++write_file(
++    name = "aws-c-common-config-hdr",
++    out = "aws/common/config.h",
++    content = [],  # blank. (for now?)
++)
++
++cc_library(
++    name = "aws-c-common-config",
++    hdrs = ["aws/common/config.h"],
++    includes = ["."],
++)
++
++cc_library(
++    name = "cJSON",
++    srcs = ["source/external/cJSON.c"],
++    hdrs = ["source/external/cJSON.h"],
++    includes = ["source/external"]
++)
++
++cc_library(
++    name = "libcbor",
++    srcs = glob(["source/external/libcbor/**/*.c"]),
++    hdrs = glob(["source/external/libcbor/**/*.h"]),
++    includes = [".", "source/external/libcbor"],
++)
++
++############################################################################
++SYS_POSIX_C =   ["source/posix/*.c"]
++SYS_WINDOWS_C = ["source/windows/*.c"]
++SYS_ANDROID_C = ["source/android/*.c"]
++
++############################################################################
++SYSENV_LINUX_C =   ["source/linux/system_info.c"]
++SYSENV_FALLBAK_C = ["source/platform_fallback_stubs/system_info.c"]
++
++############################################################################
++ARCH_ARM_C =     ["source/arch/arm/**/*.c"]
++ARCH_INTEL_C =   ["source/arch/intel/**/*.c"]
++ARCH_GENERIC_C = ["source/arch/generic/**/*.c"]
++
++############################################################################
++selects.config_setting_group(
++    name = "msvc_32",
++    match_all = [
++      "@platforms//cpu:x86_32",
++      "@bazel_tools//tools/cpp:msvc"
++    ],
++)
++
++selects.config_setting_group(
++    name = "msvc_64",
++    match_all = [
++      "@platforms//cpu:x86_64",
++      "@bazel_tools//tools/cpp:msvc"
++    ],
++)
++
++cc_library(
++    name = "aws-c-common",
++    srcs = glob(
++        ["source/**/*.c"],
++        exclude = [
++            "source/external/**",
++        ] + ARCH_ARM_C + ARCH_INTEL_C + ARCH_GENERIC_C +
++            SYS_WINDOWS_C + SYS_ANDROID_C + SYS_POSIX_C +
++            SYSENV_LINUX_C + SYSENV_FALLBAK_C,
++    ) + select({
++        "@platforms//cpu:aarch32": glob(ARCH_ARM_C),
++        "@platforms//cpu:aarch64": glob(ARCH_ARM_C),
++        # ARCH_INTEL_C
++        "@platforms//cpu:x86_32": ["source/arch/intel/encoding_avx2.c", "source/arch/intel/cpuid.c"],
++        "@platforms//cpu:x86_64": ["source/arch/intel/encoding_avx2.c", "source/arch/intel/cpuid.c"],
++        "//conditions:default": glob(ARCH_GENERIC_C),
++    }) + select({
++        # ARCH_INTEL_C
++        ":msvc_32": ["source/arch/intel/msvc/cpuid.c"],
++        ":msvc_64": ["source/arch/intel/msvc/cpuid.c"],
++        "@platforms//cpu:x86_32": ["source/arch/intel/asm/cpuid.c"],
++        "@platforms//cpu:x86_64": ["source/arch/intel/asm/cpuid.c"],
++        "//conditions:default": [],
++    }) + select({
++        "@platforms//os:windows": glob(SYS_WINDOWS_C),
++        "@platforms//os:android": ["source/android/logging.c"],  # SYS_ANDROID_C
++        "//conditions:default": glob(SYS_POSIX_C),
++    }) + select({
++        "@platforms//os:linux": glob(SYSENV_LINUX_C),
++        "//conditions:default": glob(SYSENV_FALLBAK_C),
++    }),
++    hdrs = glob([
++        "include/aws/common/*.h",
++        "include/aws/common/*.inl",
++        "include/aws/common/external/*.h",
++        "include/aws/common/posix/*.inl",
++        "include/aws/common/private/*.h",
++        "include/aws/common/private/*.inl",
++    ]),
++    includes = ["include"],
++    defines = [
++        "AWS_AFFINITY_METHOD=0",  # TODO see source/posix/thread.c
++    ],
++    copts = select({
++        ":msvc_32": ["/arch:AVX2"],
++        ":msvc_64": ["/arch:AVX2"],
++        "@platforms//cpu:x86_32": ["-mavx2"],
++        "@platforms//cpu:x86_64": ["-mavx2"],
++        "//conditions:default": [],
++    }),
++    linkopts = select({
++        "@platforms//os:linux": ["-lpthread", "-ldl"],
++        "//conditions:default": [],
++    }),
++    deps = [
++        ":aws-c-common-config",
++        ":libcbor",
++        ":cJSON",
++    ],
++    visibility = ["//visibility:public"],
++)

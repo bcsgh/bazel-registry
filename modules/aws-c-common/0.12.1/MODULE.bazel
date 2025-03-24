@@ -1,0 +1,13 @@
+module(
+    name = "aws-c-common",
+    version = "0.12.1",
+)
+
+bazel_dep(
+    name = "bazel_skylib",
+    version = "1.7.1",
+)
+bazel_dep(
+    name = "platforms",
+    version = "0.0.10",
+)
