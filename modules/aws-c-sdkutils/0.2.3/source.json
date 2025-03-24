@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-sdkutils/archive/refs/tags/v0.2.3.tar.gz",
+  "strip_prefix": "aws-c-sdkutils-0.2.3",
+  "integrity": "sha256-WgSJ1Qg0G4TupVbjUXF7wzUk09/WIH7jq6YGiZTqYBg=",
+  "patches": {
+    "add_build_file.patch": "sha256-iZJoU6mqnzAnmF90jso6PLBtAo2HnyLJEUi6qtjJ7qY=",
+    "module_dot_bazel.patch": "sha256-ZFV6cLDWnxcZD+38TT3D5+34gse/oB+pbZF2xeoSnRM="
+  },
+  "patch_strip": 1
+}
