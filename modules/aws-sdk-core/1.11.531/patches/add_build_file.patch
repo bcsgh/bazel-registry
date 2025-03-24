@@ -57,28 +57,28 @@ index 00000000..ffffffff
 +    flag_values = {":aws_http": v},
 +) for v in ["crt", "curl"]]
 +
-+HTTP_CRT_CPP =     ["src/aws-cpp-sdk-core/source/http/crt/*.cpp"]
-+HTTP_CURL_CPP =    ["src/aws-cpp-sdk-core/source/http/curl/*.cpp"]
-+HTTP_WINDOWS_CPP = ["src/aws-cpp-sdk-core/source/http/windows/*.cpp"]
++HTTP_CRT_CPP =     ["source/http/crt/*.cpp"]
++HTTP_CURL_CPP =    ["source/http/curl/*.cpp"]
++HTTP_WINDOWS_CPP = ["source/http/windows/*.cpp"]
 +HTTP_EXCLUDE = HTTP_CRT_CPP + HTTP_CURL_CPP + HTTP_WINDOWS_CPP
 +
 +############################################################################
-+PLATFORM_ANDROID_CPP = ["src/aws-cpp-sdk-core/source/platform/android/*.cpp"]
-+PLATFORM_LINUX_CPP =   ["src/aws-cpp-sdk-core/source/platform/linux-shared/*.cpp"]
-+PLATFORM_WINDOWS_CPP = ["src/aws-cpp-sdk-core/source/platform/windows/*.cpp"]
++PLATFORM_ANDROID_CPP = ["source/platform/android/*.cpp"]
++PLATFORM_LINUX_CPP =   ["source/platform/linux-shared/*.cpp"]
++PLATFORM_WINDOWS_CPP = ["source/platform/windows/*.cpp"]
 +PLATFORM_EXCLUDE = PLATFORM_ANDROID_CPP + PLATFORM_LINUX_CPP + PLATFORM_WINDOWS_CPP
 +
 +############################################################################
-+NET_LINUX_CPP =   ["src/aws-cpp-sdk-core/source/net/linux-shared/*.cpp"]
-+NET_WINDOWS_CPP = ["src/aws-cpp-sdk-core/source/net/windows/*.cpp"]
-+NET_NONE_CPP =    ["src/aws-cpp-sdk-core/source/net/*.cpp"]
++NET_LINUX_CPP =   ["source/net/linux-shared/*.cpp"]
++NET_WINDOWS_CPP = ["source/net/windows/*.cpp"]
++NET_NONE_CPP =    ["source/net/*.cpp"]
 +NET_EXCLUDE = NET_LINUX_CPP + NET_WINDOWS_CPP + NET_NONE_CPP
 +
 +############################################################################
 +cc_library(
 +    name = "aws-sdk-core",
 +    srcs = glob(
-+        ["src/aws-cpp-sdk-core/source/**/*.cpp"],
++        ["source/**/*.cpp"],
 +        exclude = HTTP_EXCLUDE + NET_EXCLUDE + PLATFORM_EXCLUDE,
 +    ) + select({
 +        ":aws_http_crt": glob(HTTP_CRT_CPP),
@@ -94,10 +94,10 @@ index 00000000..ffffffff
 +        "@platforms//os:windows": glob(PLATFORM_WINDOWS_CPP),
 +    }),
 +    hdrs = glob([
-+        "src/aws-cpp-sdk-core/include/aws/core/**/*.h",
-+        "src/aws-cpp-sdk-core/include/smithy/**/*.h",
++        "include/aws/core/**/*.h",
++        "include/smithy/**/*.h",
 +    ]),
-+    includes = ["src/aws-cpp-sdk-core/include"],
++    includes = ["include"],
 +    defines = [
 +        "ENABLE_OPENSSL_ENCRYPTION",
 +    ] + select({

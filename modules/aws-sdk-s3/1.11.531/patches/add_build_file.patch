@@ -6,9 +6,9 @@ index 00000000..ffffffff
 @@ -0,0 +1,8 @@
 +cc_library(
 +    name = "aws-sdk-s3",
-+    srcs = glob(["generated/src/aws-cpp-sdk-s3/source/**/*.cpp"]),
-+    hdrs = glob(["generated/src/aws-cpp-sdk-s3/include/**/*.h"]),
-+    includes = ["generated/src/aws-cpp-sdk-s3/include"],
++    srcs = glob(["source/**/*.cpp"]),
++    hdrs = glob(["include/**/*.h"]),
++    includes = ["include"],
 +    deps = ["@aws-sdk-core"],
 +    visibility = ["//visibility:public"],
 +)

@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/aws/aws-sdk-cpp/archive/refs/tags/1.11.531.tar.gz",
-  "strip_prefix": "aws-sdk-cpp-1.11.531",
+  "strip_prefix": "aws-sdk-cpp-1.11.531/generated/src/aws-cpp-sdk-s3",
   "integrity": "sha256-bnkrtOiyBEjh7k8rwaaa92lsBGrVI9ULg+b4mIikDUI=",
   "patches": {
-    "add_build_file.patch": "sha256-uEnEY+NvExCkAk3UuPUN4Xv7Z6cZ93dV7AVSW0/QEU4=",
+    "add_build_file.patch": "sha256-B9kkyKZDYWbNYqk7vWxzIMw08akUkSGrdIEFW040Zbc=",
     "module_dot_bazel.patch": "sha256-8yIpqIZP4irrDY5WNbdf8H1PG9NKn2i3eFvWsbjktPM="
   },
   "patch_strip": 1
