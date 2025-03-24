@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-io/archive/refs/tags/v0.17.0.tar.gz",
+  "strip_prefix": "aws-c-io-0.17.0",
+  "integrity": "sha256-7fjb0ZcEaF90AMb8P8uHWrhYseVTgsfskz793/KLIzI=",
+  "patches": {
+    "add_build_file.patch": "sha256-N9rvtDVSXeguwkR4quy46DhYBuE0YLYTyFaTC4FdH2g=",
+    "module_dot_bazel.patch": "sha256-cDBL3oTixk/qNnoH9/YTInO5p+8lQ6CV2tyfYslHWI4="
+  },
+  "patch_strip": 1
+}

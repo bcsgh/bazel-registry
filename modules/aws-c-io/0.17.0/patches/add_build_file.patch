@@ -1,0 +1,78 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,72 @@
++load("@bazel_skylib//lib:selects.bzl", "selects")
++
++TLS_DARWIN_C = [
++    "source/darwin/secure_transport_tls_channel_handler.c",
++    "source/darwin/darwin_pki_utils.c",
++]
++TLS_S2N_C = [
++    "source/s2n/s2n_tls_channel_handler.c",
++]
++TLS_WINDOWS_C = [
++    "source/windows/secure_channel_tls_handler.c",
++    "source/windows/windows_pki_utils.c",
++]
++TLS_EXCLUDE = TLS_DARWIN_C + TLS_S2N_C + TLS_WINDOWS_C
++
++############################################################################
++OTHER_BSD_C = ["source/bsd/kqueue_event_loop.c"]
++OTHER_LINUX_C = ["source/linux/epoll_event_loop.c"]
++OTHER_POSIX_C = [
++    "source/posix/host_resolver.c",
++    "source/posix/pipe.c",
++    "source/posix/shared_library.c",
++    "source/posix/socket.c",
++]
++OTHER_WINDOWS_C = ["source/windows/**/*.c"]
++OTHER_EXCLUDE = OTHER_BSD_C + OTHER_LINUX_C + OTHER_POSIX_C + OTHER_WINDOWS_C
++
++############################################################################
++cc_library(
++    name = "aws-c-io",
++    srcs = glob([
++            "source/*.c",
++            "source/pkcs11/v2.40/*.h",
++            "source/pkcs11_private.h",
++        ],
++        exclude = TLS_EXCLUDE + OTHER_EXCLUDE,
++    ) + select({
++        "@platforms//os:osx": glob(TLS_DARWIN_C),
++        "@platforms//os:ios": glob(TLS_DARWIN_C),
++        "@platforms//os:windows": glob(TLS_WINDOWS_C),
++        "//conditions:default": glob(TLS_S2N_C),
++    }) + selects.with_or({
++        "@platforms//os:freebsd": (OTHER_BSD_C + OTHER_POSIX_C),
++        "@platforms//os:netbsd": (OTHER_BSD_C + OTHER_POSIX_C),
++        "@platforms//os:openbsd": (OTHER_BSD_C + OTHER_POSIX_C),
++        "@platforms//os:windows": glob(OTHER_WINDOWS_C, exclude=TLS_WINDOWS_C),
++        "@platforms//os:linux":
++            (OTHER_LINUX_C + OTHER_POSIX_C),
++    }),
++    hdrs = glob(["include/**/*.h"], exclude = TLS_EXCLUDE + OTHER_EXCLUDE),
++    includes = ["include"],
++    defines = selects.with_or({
++        "@platforms//os:freebsd": ["AWS_ENABLE_KQUEUE"],
++        "@platforms//os:netbsd": ["AWS_ENABLE_KQUEUE"],
++        "@platforms//os:openbsd": ["AWS_ENABLE_KQUEUE"],
++        "@platforms//os:osx": ["AWS_ENABLE_KQUEUE"],
++        "@platforms//os:ios": ["AWS_ENABLE_DISPATCH_QUEUE"],
++        "@platforms//os:windows": ["AWS_OS_WINDOWS"],
++        "@platforms//os:linux": ["AWS_ENABLE_EPOLL", "USE_S2N"],
++    }),
++    deps = [
++        "@aws-c-cal",
++        "@aws-c-common",
++        "@ittapi",
++    ] + select({
++        "@platforms//os:osx": [],
++        "@platforms//os:ios": [],
++        "@platforms//os:windows": [],
++        "//conditions:default": ["@aws-s2n-tls"],
++    }),
++    visibility = ["//visibility:public"],
++)
