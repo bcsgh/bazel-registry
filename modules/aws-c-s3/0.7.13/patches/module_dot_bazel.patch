@@ -1,0 +1,19 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/MODULE.bazel
+@@ -0,0 +1,13 @@
++module(
++    name = "aws-c-s3",
++    version = "0.7.13",
++)
++
++bazel_dep(
++    name = "aws-c-auth",
++    version = "0.8.7",
++)
++bazel_dep(
++    name = "aws-checksums",
++    version = "0.2.3",
++)

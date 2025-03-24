@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-s3/archive/refs/tags/v0.7.13.tar.gz",
+  "strip_prefix": "aws-c-s3-0.7.13",
+  "integrity": "sha256-uK6yYHKZXy/Udkx4igmkSYACw+UG70wnl8VZqwGK4NM=",
+  "patches": {
+    "add_build_file.patch": "sha256-70BDdUpL93PKUaQqunWJqtU8sU8vedTgDaYgIPgL1HA=",
+    "module_dot_bazel.patch": "sha256-IrlEHkIKtvoyHnDX20c+t3sWwrmpc03ECmkHKSXoFWw="
+  },
+  "patch_strip": 1
+}
