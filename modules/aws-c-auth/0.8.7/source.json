@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/awslabs/aws-c-auth/archive/refs/tags/v0.8.7.tar.gz",
+  "strip_prefix": "aws-c-auth-0.8.7",
+  "integrity": "sha256-uWHL7QuCJI0+p6R/Wkm/F01aCpd7vdfvPhstLrVGivU=",
+  "patches": {
+    "add_build_file.patch": "sha256-VHlzCOIAc/nzOtyn4PFp8oZBLwrOlJ4V8wFz0Cx07iY=",
+    "module_dot_bazel.patch": "sha256-nRLScBorS7sdJ9aQ29QmNL5CEqbZFsYQougOEcOVVRQ="
+  },
+  "patch_strip": 1
+}

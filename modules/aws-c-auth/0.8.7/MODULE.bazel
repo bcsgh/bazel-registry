@@ -1,0 +1,17 @@
+module(
+    name = "aws-c-auth",
+    version = "0.8.7",
+)
+
+bazel_dep(
+    name = "aws-c-http",
+    version = "0.9.5",
+)
+bazel_dep(
+    name = "aws-c-io",
+    version = "0.17.0",
+)
+bazel_dep(
+    name = "aws-c-sdkutils",
+    version = "0.2.3",
+)

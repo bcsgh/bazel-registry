@@ -1,0 +1,21 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,15 @@
++cc_library(
++    name = "aws-c-auth",
++    srcs = glob(["source/*.c"]),
++    hdrs = glob([
++        "include/aws/auth/*.h",
++        "include/aws/auth/private/*.h",
++    ]),
++    includes = ["include"],
++    deps = [
++        "@aws-c-http",
++        "@aws-c-io",
++        "@aws-c-sdkutils",
++    ],
++    visibility = ["//visibility:public"],
++)
