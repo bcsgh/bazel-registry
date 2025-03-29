@@ -1,0 +1,5 @@
+{
+  "type": "git_repository",
+  "remote": "https://github.com/bcsgh/proto-api.git",
+  "tag": "0.0.2"
+}
