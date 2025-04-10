@@ -1,0 +1,24 @@
+module(
+    name = "com_github_etr_libhttpserver",
+    version = "0.19.0",
+)
+
+bazel_dep(
+    name = "curl",
+    version = "8.8.0.bcr.2",
+)
+
+bazel_dep(
+    name = "org_gnu_microhttpd",
+    version = "v0.9.71",
+)
+
+bazel_dep(
+    name = "platforms",
+    version = "0.0.10",
+)
+
+bazel_dep(
+    name = "rules_foreign_cc",
+    version = "0.10.1",
+)

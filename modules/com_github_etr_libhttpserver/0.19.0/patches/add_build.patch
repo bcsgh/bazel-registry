@@ -1,0 +1,284 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 0000000..a95cadc
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,278 @@
++cc_library(
++    name = "libhttpserver",
++    hdrs = [
++        "src/gettext.h",
++        "src/httpserver.hpp",
++    ],
++    copts = [
++        "-fexceptions",
++        #"-lpthread",
++        #"-pthread",
++    ],
++    includes = [
++        "src",
++    ],
++    linkopts = [
++        "-pthread",
++        "-lgnutls",  # apt install libgnutls28-dev
++    ],
++    local_defines = [
++        "HTTPSERVER_COMPILATION",
++    ],
++    visibility = ["//visibility:public"],
++    deps = [
++        ":basic_auth_fail_response",
++        ":deferred_response",
++        ":digest_auth_fail_response",
++        ":file_response",
++        ":http_arg_value",
++        ":http_endpoint",
++        ":http_request",
++        ":http_utils",
++        ":string_utilities",
++        ":webserver",
++        "@org_gnu_microhttpd//:microhttpd",
++    ],
++)
++
++cc_library(
++    name = "basic_auth_fail_response",
++    srcs = ["src/basic_auth_fail_response.cpp"],
++    hdrs = ["src/httpserver/basic_auth_fail_response.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [":webserver"],
++)
++
++cc_library(
++    name = "deferred_response",
++    srcs = ["src/deferred_response.cpp"],
++    hdrs = ["src/httpserver/deferred_response.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [":webserver"],
++)
++
++cc_library(
++    name = "digest_auth_fail_response",
++    srcs = ["src/digest_auth_fail_response.cpp"],
++    hdrs = ["src/httpserver/digest_auth_fail_response.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [":webserver"],
++)
++
++cc_library(
++    name = "file_response",
++    srcs = ["src/file_response.cpp"],
++    hdrs = ["src/httpserver/file_response.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [
++        ":http_utils",
++        ":webserver",
++    ],
++)
++
++cc_library(
++    name = "http_endpoint",
++    srcs = ["src/details/http_endpoint.cpp"],
++    hdrs = ["src/httpserver/details/http_endpoint.hpp"],
++    copts = ["-fexceptions"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [":http_utils"],
++)
++
++cc_library(
++    name = "http_request",
++    srcs = ["src/http_request.cpp"],
++    hdrs = ["src/httpserver/http_request.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [
++        ":http_arg_value",
++        ":http_utils",
++        ":file_info",
++    ],
++)
++
++cc_library(
++    name = "file_info",
++    srcs = ["src/file_info.cpp"],
++    hdrs = ["src/httpserver/file_info.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++)
++
++cc_library(
++    name = "http_utils",
++    srcs = ["src/http_utils.cpp"],
++    hdrs = ["src/httpserver/http_utils.hpp"],
++    copts = ["-fexceptions"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = [
++        "HTTPSERVER_COMPILATION",
++        "MHD_NO_DEPRECATION",  # ignore use of MHD_HTTP_UNORDERED_COLLECTION
++    ],
++    deps = [
++        ":http_arg_value",
++        ":string_utilities",
++        "@org_gnu_microhttpd//:microhttpd",
++    ],
++)
++
++cc_library(
++    name = "http_arg_value",
++    hdrs = ["src/httpserver/http_arg_value.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++)
++
++cc_library(
++    name = "string_utilities",
++    srcs = ["src/string_utilities.cpp"],
++    hdrs = ["src/httpserver/string_utilities.hpp"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++)
++
++cc_library(
++    name = "webserver",
++    srcs = [
++        "src/http_resource.cpp",
++        "src/http_response.cpp",
++        "src/string_response.cpp",
++        "src/webserver.cpp",
++    ],
++    hdrs = [
++        "src/gettext.h",
++        "src/httpserver/create_webserver.hpp",
++        "src/httpserver/details/modded_request.hpp",
++        "src/httpserver/http_resource.hpp",
++        "src/httpserver/http_response.hpp",
++        "src/httpserver/string_response.hpp",
++        "src/httpserver/webserver.hpp",
++    ],
++    copts = ["-fexceptions"],
++    includes = [
++        "src",
++        "src/httpserver",
++    ],
++    local_defines = ["HTTPSERVER_COMPILATION"],
++    deps = [
++        ":http_arg_value",
++        ":http_endpoint",
++        ":http_request",
++        ":http_utils",
++        "@org_gnu_microhttpd//:microhttpd",
++    ],
++)
++
++#### TESTS:
++
++cc_library(
++    name = "littletest",
++    hdrs = ["test/littletest.hpp"],
++    includes = ["test"],
++)
++
++UNIT_TESTS = [
++    [f, "%s_unit_test" % f[f.rfind("/")+1:-9]]
++    for f in glob(["test/unit/*_test.cpp"])
++]
++
++[
++    cc_test(
++        name = name,
++        srcs = [file],
++        deps = [
++            ":libhttpserver",
++            ":littletest",
++        ],
++        data = glob([
++            "test/test_content*",
++        ]),
++        copts = ["-fexceptions"],
++        local_defines = [
++            "HTTPSERVER_COMPILATION",
++            "HTTPSERVER_DATA_ROOT=./test",
++        ],
++    )
++    for file, name in UNIT_TESTS
++]
++
++INTEG_TEST_PORT_START = 8481
++
++INTEG_TESTS = [
++    [f, "%s_integ_test" % f[f.rfind("/")+1:-4], (INTEG_TEST_PORT_START + p)]
++    for p, f in enumerate(glob(["test/integ/*.cpp"]))
++]
++
++"""
++# If anyone cares what ports are being assigned.
++print("Tests running on ports:\n" + "\n".join([
++  "port %d -> :%s" % (f[2], f[1])
++  for f in INTEG_TESTS
++]))
++#"""
++
++[
++    cc_test(
++        name = name,
++        srcs = [file],
++        deps = [
++            ":libhttpserver",
++            ":littletest",
++            "@curl//:curl",
++        ],
++        data = glob([
++            "test/test_content*",
++            "test/*.pem",
++        ]),
++        copts = ["-fexceptions"],
++        local_defines = [
++            #"CASE_INSENSITIVE", # TODO
++            "HTTPSERVER_COMPILATION",
++            "HTTPSERVER_NO_LOCAL_FS",
++            "HTTPSERVER_PORT=%d"  % port,
++            "HTTPSERVER_DATA_ROOT=./test",
++        ],
++    )
++    for file,name,port in INTEG_TESTS
++]
++
++test_suite(
++    name = "all_tests",
++    tests = [":%s" % f[1] for f in UNIT_TESTS + INTEG_TESTS],
++)

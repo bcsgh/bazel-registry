@@ -1,0 +1,30 @@
+diff --git a/BUILD.bazel b/BUILD.bazel
+new file mode 100644
+--- /dev/null
++++ b/BUILD.bazel
+@@ -0,0 +1,25 @@
++load("@rules_foreign_cc//foreign_cc:configure.bzl", "configure_make")
++
++filegroup(
++    name = "lib_source",
++    srcs = glob(["**"], exclude = ["bazel-*", "bazel-*/**"]),
++)
++
++configure_make(
++    name = "microhttpd",
++    env = {
++        "CFLAGS": "-Wno-error",
++    },
++    configure_options = [
++        #"--help",
++        "--disable-doc",
++        "--disable-examples",
++        #"--enable-messages",  # Helps debugging.
++        "--with-gnutls",
++        "--enable-shared=no",
++    ],
++    defines = ["HAVE_GNUTLS"],
++    lib_source = "@org_gnu_microhttpd//:lib_source",
++    out_static_libs = ["libmicrohttpd.a"],
++    visibility = ["//visibility:public"],
++)

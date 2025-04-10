@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-6PRF6F+vcnuJ6flZDa6kRzrgDq04sjfPHtpVFyuJsYI=",
+    "strip_prefix": "libmicrohttpd-0.9.71",
+    "url": "https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.71.tar.gz",
+    "patch_strip": 1,
+    "patches": {
+        "add_build.patch": "sha256-Y3ERZbrozigqbLDXpzalZ1xBtVVMWEYNcnbHf5FCLcI=",
+        "module_dot_bazel.patch": "sha256-RUo61wFCRIIwEFjTSvtz1YQe09/AAUAohUtQY0ojoX0="
+    }
+}

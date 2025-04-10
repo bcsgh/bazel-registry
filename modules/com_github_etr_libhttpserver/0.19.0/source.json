@@ -1,0 +1,10 @@
+{
+    "integrity": "sha256-sQh2ntaNcsWJYcUXqxbDpk5O/cTEVodyO7RbueBMUZM=",
+    "strip_prefix": "libhttpserver-0.19.0",
+    "url": "https://github.com/etr/libhttpserver/archive/refs/tags/0.19.0.tar.gz",
+    "patch_strip": 1,
+    "patches": {
+        "add_build.patch": "sha256-n5R5JRm2oLzU2kSFxIPW0YG/JYGOVo7zOqUxuOeV5v4=",
+        "module_dot_bazel.patch": "sha256-ror0DyZ3dG2r+dA2TC914tRZNlYUMW+NiSzMY/QwTBs="
+    }
+}
