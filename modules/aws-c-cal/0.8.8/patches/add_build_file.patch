@@ -3,7 +3,7 @@ new file mode 100644
 index 00000000..ffffffff
 --- /dev/null
 +++ b/BUILD
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,38 @@
 +CRYPTO_DARWIN_C =  ["source/darwin/**/*.c"]
 +CRYPTO_UNIX_C =    ["source/unix/**/*.c"]
 +CRYPTO_WINDOWS_C = ["source/windows/**/*.c"]
@@ -21,7 +21,10 @@ index 00000000..ffffffff
 +        "@platforms//os:netbsd": glob(CRYPTO_UNIX_C),
 +        "@platforms//os:openbsd": glob(CRYPTO_UNIX_C),
 +        "@platforms//os:windows": glob(CRYPTO_WINDOWS_C),
-+    }),
++    }) + [
++        "source/shared/ed25519.c",
++        "source/shared/lccrypto_common.c",
++    ],
 +    hdrs = glob([
 +        "include/aws/cal/*.h",
 +        "include/aws/cal/private/*.h",
@@ -32,9 +35,9 @@ index 00000000..ffffffff
 +    ] + select({
 +        #"@platforms//os:osx": [":apple-oss-common-crypto-not-implemented"],
 +        #"@platforms//os:ios": [":apple-oss-common-crypto-not-implemented"],
-+        "@platforms//os:linux": ["@openssl//:ssl"],
-+        "@platforms//os:netbsd": ["@openssl//:ssl"],
-+        "@platforms//os:openbsd": ["@openssl//:ssl"],
++        "@platforms//os:linux": ["@boringssl//:ssl"],
++        "@platforms//os:netbsd": ["@boringssl//:ssl"],
++        "@platforms//os:openbsd": ["@boringssl//:ssl"],
 +        #"@platforms//os:windows": [":bcrypt-not-implemented"],
 +    }),
 +    visibility = ["//visibility:public"],

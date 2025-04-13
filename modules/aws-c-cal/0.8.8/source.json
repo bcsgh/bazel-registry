@@ -3,8 +3,8 @@
   "strip_prefix": "aws-c-cal-0.8.8",
   "integrity": "sha256-RaXl5LkHCwLIqEf/dTEGj4gmIqTorE/tR3a3cp8Bjqk=",
   "patches": {
-    "add_build_file.patch": "sha256-TakVBmDYXMpaB7tvgiTAJ5yvjxI8mT7YPps1lCQNJEc=",
-    "module_dot_bazel.patch": "sha256-Wthb4whj9FZQr5hR+m89i4AzS2MVTh7jKjeAF0DeSOk="
+    "add_build_file.patch": "sha256-XQGGsSUuXdsYZy+mIvBWfLwkDNPH2hT/sUet0xz76bg=",
+    "module_dot_bazel.patch": "sha256-aH4T2DuOrY8Fb1uJeTI3YZ0ghjCixbhJP+R4o7iYXFs="
   },
   "patch_strip": 1
 }

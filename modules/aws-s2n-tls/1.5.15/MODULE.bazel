@@ -4,6 +4,6 @@ module(
 )
 
 bazel_dep(
-    name = "openssl",
-    version = "3.3.1.bcr.1",
+    name = "boringssl",
+    version = "0.20250311.0",
 )
