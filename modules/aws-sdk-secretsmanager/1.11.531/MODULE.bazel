@@ -1,0 +1,9 @@
+module(
+    name = "aws-sdk-secretsmanager",
+    version = "1.11.531",
+)
+
+bazel_dep(
+    name = "aws-sdk-core",
+    version = "1.11.531",
+)

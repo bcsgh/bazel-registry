@@ -1,0 +1,14 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 00000000..ffffffff
+--- /dev/null
++++ b/BUILD
+@@ -0,0 +1,8 @@
++cc_library(
++    name = "aws-sdk-iam",
++    srcs = glob(["source/**/*.cpp"]),
++    hdrs = glob(["include/**/*.h"]),
++    includes = ["include"],
++    deps = ["@aws-sdk-core"],
++    visibility = ["//visibility:public"],
++)
