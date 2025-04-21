@@ -1,5 +1,5 @@
 {
   "type": "git_repository",
-  "remote": "ssh://git@github.com/bcsgh/test-base.git",
+  "remote": "https://github.com/bcsgh/test-base.git",
   "tag": "0.0.1"
 }
