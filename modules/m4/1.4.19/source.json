@@ -1,0 +1,10 @@
+{
+  "url": "https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz",
+  "strip_prefix": "m4-1.4.19",
+  "integrity": "sha256-O+SibYJf/f2lKlb8QyRkVpiaNjAJPM7T+930dx7linA=",
+  "patches": {
+    "add_build_file.patch": "sha256-6AaaaCfOTYrR3hzHXcODgMBJii0IAk+cHLGphMuf7uU=",
+    "module_dot_bazel.patch": "sha256-UlIrRXRngg96pJm7XmgoFWTvPDovGUrmNjB+VJHKoLY="
+  },
+  "patch_strip": 1
+}
